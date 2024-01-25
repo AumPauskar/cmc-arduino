@@ -81,26 +81,36 @@ void loop() {
 	int stringKeyIndex = 0; // will store key value for time being
 	char keypressed = myKeypad.getKey();
 	if (keypressed != NO_KEY) {
-		Serial.println(keypressed);
+		// Serial.println(keypressed);
 	}
   
 	// getting the key pressed from the user
 	if (keypressed){
+		// Serial.println(keypressed);
 		// gets triggered for numeric key presses
 		if (keypressed != 'D' && keypressed != 'A' && keypressed != 'B' && keypressed != 'C') {
-			Serial.println(keypressed);
 			lcd_1.print(keypressed);
 			lcd_1.setCursor(++LCDRow, 10);
 			enteredValue += keypressed;
 		// a - clear the entered value
 		} else if (keypressed == 'A') {
+			stringKeyIndex = 0;
 			lcd_1.clear();
 			lcd_1.print("Enter value:");
 			lcd_1.setCursor(++LCDRow, 10);
 			enteredValue = "";
 			encoderSpeed = 0;
 		// d - update the entered value
+		} else if (keypressed == 'D') {
+			Serial.println("Entered value: ");
+			Serial.println(enteredValue);
 		} else {
+			if (stringKeyIndex > 14) {
+				Serial.println("String key index out of bounds");
+			} else {
+				stringKey[stringKeyIndex] = keypressed;
+				stringKeyIndex++;
+			}
 			LCDRow = 0;
 			lcd_1.clear();
 			lcd_1.print("Value updated");
