@@ -1,6 +1,9 @@
 // ----------
 // keypad setup
 #include <Keypad.h>
+#include <Servo.h>
+
+Servo servoBase; // create servo object to control a servo
 
 const byte numRows= 4; //number of rows on the keypad
 const byte numCols= 4; //number of columns on the keypad
@@ -45,6 +48,7 @@ int lastMSB = 0;
 int lastLSB = 0;
 
 void setup() {
+	// encoder setup
 	Serial.begin (9600);
 	pinMode(encoderPin1, INPUT);
 	pinMode(encoderPin2, INPUT);
@@ -53,12 +57,18 @@ void setup() {
 	attachInterrupt(0, updateEncoder, CHANGE);
 	attachInterrupt(1, updateEncoder, CHANGE);
   
+	// motor setup
 	pinMode(motorA,OUTPUT);
 	pinMode(motorB,OUTPUT);
   
+	// lcd setup
 	lcd_1.begin(16, 2);
 	lcd_1.print("Enter value:");
 	lcd_1.setCursor(LCDRow, 10);
+
+	// servo setup
+   servoBase.attach(A0);//Pin a utilizar para servo
+   servoBase.write(0);  //asigno 0 al servo motor
 }
 
 void loop() {
@@ -133,6 +143,13 @@ void loop() {
 	} // keypressed trigger end
 	debugEncoderSpeed = (encoderSpeed * 100) / 255;
 	// Serial.println(debugEncoderSpeed);
+
+	
+  for(int i=0; i<=180; i=i+10)
+  {
+   servoBase.write(i);
+   delay(2000);
+  }
 
 }
 
