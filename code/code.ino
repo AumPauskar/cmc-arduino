@@ -72,6 +72,8 @@ void setup() {
 }
 
 void loop() {
+	// store the increment in angle of the servo motor
+	int angle = 30;
 	// encoder control statements
 	correctEncoderValue = encoderValue/4;
   
@@ -110,10 +112,12 @@ void loop() {
 			lcd_1.setCursor(++LCDRow, 10);
 			enteredValue = "";
 			encoderSpeed = 0;
+			angle = 0;
 		// d - update the entered value
 		} else if (keypressed == 'D') {
 			Serial.println("Entered value: ");
 			Serial.println(enteredValue);
+			angle = 180/enteredValue.toInt();
 		} else {
 			if (stringKeyIndex > 14) {
 				Serial.println("String key index out of bounds");
@@ -145,7 +149,7 @@ void loop() {
 	// Serial.println(debugEncoderSpeed);
 
 	
-  for(int i=0; i<=180; i=i+10)
+  for(int i=0; i<=180; i=i+angle)
   {
    servoBase.write(i);
    delay(2000);
