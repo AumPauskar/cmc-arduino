@@ -1,0 +1,2 @@
+libcamera-vid -t 0 --inline --codec h264 --bitrate 2000000 --width 640 --height 480 --framerate 25 --listen | gst-launch-1.0 fdsrc ! h264parse ! rtph264pay config-interval=1 pt=96 ! gdppay ! tcpserversink host=192.168.29.87 port=5050
+libcamera-vid -t 0 --inline --listen -o tcp://0.0.0.0:8888
