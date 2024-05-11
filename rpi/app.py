@@ -1,29 +1,18 @@
-from flask import Flask, render_template, Response
-import cv2
+from flask import Flask
+from flask import render_template
+from flask import request
 
 app = Flask(__name__)
 
-# OpenCV VideoCapture object
-cap = cv2.VideoCapture(0)
-
-def gen_frames():
-    while True:
-        success, frame = cap.read()  # read the camera frame
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-
 @app.route('/')
-def index():
+def html_page():
     return render_template('index.html')
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+@app.route('/send', methods=['POST'])
+def send():
+    number_input = request.form.get('numberInput', '')
+    # Use the 'number' variable for further processing
+    return 'Received number: ' + number_input
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8005)
+    app.run(debug=True, host='0.0.0.0')
